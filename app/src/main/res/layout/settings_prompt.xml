@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/background_color"/>
+
+    <EditText
+        android:id="@+id/editNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edit name..."/>
+
+
+    <EditText
+        android:id="@+id/editDescriptionInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edit description..."/>
+
+    <EditText
+        android:id="@+id/editAgeInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Edit age..."/>
+
+</LinearLayout>

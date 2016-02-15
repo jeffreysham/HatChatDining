@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">HatChat Dining</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="eat_question">What would you like to eat?</string>
+    <string name="prompt">Choose a cuisine</string>
+    <string-array name="cuisine_array">
+        <item>Surprise Me</item>
+        <item>American</item>
+        <item>Italian</item>
+        <item>Mexican</item>
+        <item>Chinese</item>
+        <item>Thai</item>
+        <item>Indian</item>
+        <item>Japanese</item>
+        <item>Southern</item>
+        <item>Spanish</item>
+        <item>Mediterranean</item>
+        <item>Caribbean</item>
+        <item>Seafood</item>
+        <item>Vegetarian</item>
+        <item>Kosher</item>
+        <item>Buffet</item>
+    </string-array>
+</resources> 
