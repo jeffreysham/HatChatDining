@@ -1,8 +1,10 @@
 package com.jeffreysham.hatchatdining;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -67,6 +69,7 @@ public class HandleRestaurantChoiceActivity extends AppCompatActivity {
                 try {
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(Uri.parse("tel:" + number));
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
                     startActivity(intent);
                 } catch (Exception e) {
                     Toast.makeText(context,

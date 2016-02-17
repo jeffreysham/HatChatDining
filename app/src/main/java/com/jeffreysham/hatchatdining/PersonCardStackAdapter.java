@@ -35,20 +35,20 @@ public class PersonCardStackAdapter extends CardStackAdapter{
             if (name != null) {
                 String[] nameArray = name.split(" ");
                 if (nameArray.length == 1) {
-                    ((TextView) view.findViewById(R.id.person_initials_view)).setText(name.charAt(0));
+                    ((TextView) view.findViewById(R.id.person_initials_view1)).setText(name.charAt(0) + "");
                 } else {
-                    ((TextView) view.findViewById(R.id.person_initials_view)).setText(nameArray[0].charAt(0) + nameArray[nameArray.length-1].charAt(0));
+                    ((TextView) view.findViewById(R.id.person_initials_view1)).setText(nameArray[0].charAt(0) + "" + nameArray[nameArray.length-1].charAt(0));
                 }
 
-                ((TextView) view.findViewById(R.id.name_view)).setText(name);
+                ((TextView) view.findViewById(R.id.name_view1)).setText(name);
             }
 
             if (desc != null) {
-                ((TextView) view.findViewById(R.id.description_view)).setText(desc);
+                ((TextView) view.findViewById(R.id.description_view1)).setText(desc);
             }
 
             if (age > 0) {
-                ((TextView) view.findViewById(R.id.age_view)).setText(age);
+                ((TextView) view.findViewById(R.id.age_view1)).setText(age + "");
             }
         }
 

@@ -71,14 +71,14 @@
             android:src="@drawable/call_icon"
             android:layout_weight="1"
             android:id="@+id/call_button"
-            android:backgroundTint="@color/background_color"/>
+            android:background="@drawable/send_button"/>
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/map_icon"
             android:layout_weight="1"
             android:id="@+id/map_button"
-            android:backgroundTint="@color/background_color"/>
+            android:background="@drawable/send_button"/>
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,14 +1,19 @@
 package com.jeffreysham.hatchatdining;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -42,9 +47,9 @@ public class HandlePersonChoiceActivity extends AppCompatActivity {
 
             String[] nameArray = name.split(" ");
             if (nameArray.length == 1) {
-                initalsView.setText(name.charAt(0));
+                initalsView.setText(name.charAt(0) + "");
             } else {
-                initalsView.setText(nameArray[0].charAt(0) + nameArray[nameArray.length-1].charAt(0));
+                initalsView.setText(nameArray[0].charAt(0) + "" +nameArray[nameArray.length-1].charAt(0));
             }
         }
 
@@ -58,12 +63,15 @@ public class HandlePersonChoiceActivity extends AppCompatActivity {
             descView.setText(desc);
         }
 
+
+
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(Uri.parse("tel:" + number));
+                    ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
                     startActivity(intent);
 
                 } catch (Exception e) {
@@ -86,7 +94,7 @@ public class HandlePersonChoiceActivity extends AppCompatActivity {
                         smsManager.sendTextMessage(number, null, "HatChat Dining: " + theMessageToSend, null, null);
                         Toast.makeText(context, "SMS Sent to " + name + "!",
                                 Toast.LENGTH_SHORT).show();
-
+                        messageText.setText("");
                     } catch (Exception e) {
                         Toast.makeText(context,
                                 "SMS failed, please try again later!",
@@ -109,5 +117,22 @@ public class HandlePersonChoiceActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if (v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)ev.getRawX(), (int)ev.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }

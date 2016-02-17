@@ -8,22 +8,12 @@ import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
-import com.andtinder.view.SimpleCardStackAdapter;
 import com.trnql.smart.base.SmartCompatActivity;
 import com.trnql.smart.people.PersonEntry;
 
@@ -47,6 +37,8 @@ public class NearbyPersonPickerActivity extends SmartCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_person_picker);
+
+        startSmartServices(true);
 
         Log.i("test", "person picker activity onCreate method");
         cardContainer = (CardContainer) findViewById(R.id.person_card_container);
@@ -129,6 +121,8 @@ public class NearbyPersonPickerActivity extends SmartCompatActivity {
                     theCuisine = "";
                 }
 
+                Log.i("test", "json cuisine: " + theCuisine);
+
                 if (theCuisine.equals("") || theCuisine.equals(cuisine)) {
                     peopleList.add(person);
                 }
@@ -192,6 +186,7 @@ public class NearbyPersonPickerActivity extends SmartCompatActivity {
         }
 
         cardContainer.setAdapter(adapter);
+        getAppData().stopSmartServices();
     }
 
 }

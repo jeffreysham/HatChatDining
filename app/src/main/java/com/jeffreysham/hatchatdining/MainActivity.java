@@ -1,17 +1,11 @@
 package com.jeffreysham.hatchatdining;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,13 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+
 import com.trnql.smart.base.SmartCompatActivity;
-import com.trnql.smart.people.PeopleManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -92,13 +84,13 @@ public class MainActivity extends SmartCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Fresco.initialize(this);
 
-        getAppData().setApiKey("93101c2d-2bea-4ae6-8979-9386e4a559b6");
+        getAppData().setApiKey("afa2ba5f-818a-4756-9c23-282da864593f");
+
+        startSmartServices(true);
 
         //Set product name to this application
         getPeopleManager().setSearchRadius(5000);
-        getPeopleManager().setProductName("HatChat Dining");
 
         SharedPreferences pref = this.getApplicationContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         String phoneNumber = pref.getString("phone number", null);

@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/toPeopleButton"
             android:layout_weight=".5"
-            android:backgroundTint="@color/background_color"
+            android:background="@drawable/send_button"
             android:src="@drawable/user_48"/>
 
         <ImageButton
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/toRestaurantButton"
             android:layout_weight=".5"
-            android:backgroundTint="@color/background_color"
+            android:background="@drawable/send_button"
             android:src="@drawable/restaurant_48"/>
     </LinearLayout>
 

@@ -1,5 +1,6 @@
 package com.jeffreysham.hatchatdining;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,16 +12,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
@@ -28,7 +24,6 @@ import com.andtinder.view.CardContainer;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
-import com.yelp.clientlib.entities.Coordinate;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 
@@ -137,6 +132,10 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
                 Log.i("test", "gps available");
                 Criteria criteria = new Criteria();
                 provider = locationManager.getBestProvider(criteria, false);
+
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
                 Location location = locationManager.getLastKnownLocation(provider);
                 if (location != null) {
                     currentLocation = location;

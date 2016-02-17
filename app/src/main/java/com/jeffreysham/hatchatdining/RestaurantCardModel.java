@@ -1,7 +1,6 @@
 package com.jeffreysham.hatchatdining;
 
 import com.andtinder.model.CardModel;
-import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Created by Jeffrey Sham on 2/12/2016.
