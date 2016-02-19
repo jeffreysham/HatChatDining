@@ -228,9 +228,9 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
                     String description = business.snippetText();
                     String number = business.phone();
-
+                    String mobileURL = business.mobileUrl();
                     RestaurantCardModel model = new RestaurantCardModel(name, description, rating, distance,
-                            address, photoURL,number);
+                            address, photoURL,number, mobileURL);
                     restaurantList.add(model);
                 }
 
@@ -315,6 +315,7 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
             intent.putExtra("number", tempModel.getNumber());
             intent.putExtra("latitude", currentLocation.getLatitude());
             intent.putExtra("longitude", currentLocation.getLongitude());
+            intent.putExtra("mobileURL", tempModel.getMobileURL());
             startActivity(intent);
 
         } else {

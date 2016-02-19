@@ -1,7 +1,9 @@
 package com.jeffreysham.hatchatdining;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
@@ -12,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
@@ -22,7 +25,15 @@ public class HandleRestaurantChoiceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_handle_restaurant_choice);
+
+        try {
+            setContentView(R.layout.activity_handle_restaurant_choice);
+        } catch (RuntimeException e)  {
+            e.printStackTrace();
+            Fresco.initialize(this);
+            setContentView(R.layout.activity_handle_restaurant_choice);
+        }
+
         Bundle extras = getIntent().getExtras();
         final String number = extras.getString("number");
         String desc = extras.getString("description");
@@ -31,6 +42,7 @@ public class HandleRestaurantChoiceActivity extends AppCompatActivity {
         final String address = extras.getString("address");
         final double lat = extras.getDouble("latitude");
         final double lon = extras.getDouble("longitude");
+        final String mobileURL = extras.getString("mobileURL");
 
         TextView numberView = (TextView)findViewById(R.id.number_view);
         TextView addressView = (TextView)findViewById(R.id.address_view);
@@ -45,6 +57,30 @@ public class HandleRestaurantChoiceActivity extends AppCompatActivity {
         if (photoURL != null) {
             Uri uri = Uri.parse(photoURL);
             photoView.setImageURI(uri);
+            photoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                    alert.setTitle("Visit Yelp for more information")
+                            .setMessage("Are you sure you want to navigate to Yelp?")
+                            .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(mobileURL));
+                                    startActivity(intent);
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+                    alert.create().show();
+                }
+            });
         }
 
         if (name != null) {

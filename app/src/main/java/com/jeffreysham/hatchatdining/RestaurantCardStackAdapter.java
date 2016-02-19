@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardStackAdapter;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
@@ -27,7 +28,15 @@ public class RestaurantCardStackAdapter extends CardStackAdapter{
     protected View getCardView(int i, CardModel cardModel, View view, ViewGroup viewGroup) {
         if (view == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.restaurant_card, viewGroup, false);
+
+            try {
+                view = inflater.inflate(R.layout.restaurant_card, viewGroup, false);
+            } catch (RuntimeException e) {
+                e.printStackTrace();
+                Fresco.initialize(context);
+                view = inflater.inflate(R.layout.restaurant_card, viewGroup, false);
+            }
+
             assert view != null;
         }
 

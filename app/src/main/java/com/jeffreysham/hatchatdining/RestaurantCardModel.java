@@ -13,9 +13,10 @@ public class RestaurantCardModel extends CardModel {
     private String address;
     private String photoURL;
     private String number;
+    private String mobileURL;
 
     public RestaurantCardModel(String title, String description, double rating,
-                               double distance, String address, String photoURL, String number) {
+                               double distance, String address, String photoURL, String number, String mobileURL) {
         this.title = title;
         this.description = description;
         this.rating = rating;
@@ -23,6 +24,7 @@ public class RestaurantCardModel extends CardModel {
         this.address = address;
         this.photoURL = photoURL;
         this.number = number;
+        this.mobileURL = mobileURL;
     }
 
     public String getNumber() {
@@ -53,5 +55,9 @@ public class RestaurantCardModel extends CardModel {
 
     public double getDistance() {
         return distance;
+    }
+
+    public String getMobileURL() {
+        return this.mobileURL;
     }
 }
