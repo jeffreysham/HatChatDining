@@ -38,11 +38,6 @@ public class RestaurantCardModel extends CardModel {
         return title;
     }
 
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -54,11 +49,6 @@ public class RestaurantCardModel extends CardModel {
     @Override
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public double getDistance() {

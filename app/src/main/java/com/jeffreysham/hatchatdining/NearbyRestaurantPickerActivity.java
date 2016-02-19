@@ -17,6 +17,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
@@ -31,6 +37,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -43,6 +50,7 @@ import retrofit.Retrofit;
 public class NearbyRestaurantPickerActivity extends AppCompatActivity implements LocationListener{
 
     List<RestaurantCardModel> restaurantList;
+    List<RestaurantCardModel> finalRestaurantList;
     private CardContainer cardContainer;
     private LocationManager locationManager;
     private Location currentLocation;
@@ -50,6 +58,8 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
     private String cuisine;
     private Context context = this;
     private int modelCount;
+    private ImageView hatChatSpinner;
+    private Button shuffleButton;
 
     @Override
     public void onLocationChanged(Location location) {
@@ -72,14 +82,35 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
     }
 
+    public void startAnimation() {
+        RotateAnimation rotation = new RotateAnimation(-45f, 45f, Animation.RELATIVE_TO_SELF,.5f, Animation.RELATIVE_TO_SELF,.5f);
+        rotation.setDuration(1000);
+        rotation.setInterpolator(new LinearInterpolator());
+        rotation.setRepeatMode(Animation.REVERSE);
+        rotation.setRepeatCount(Animation.INFINITE);
+
+        hatChatSpinner.startAnimation(rotation);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_restaurant_picker);
         restaurantList = new ArrayList<>();
+        finalRestaurantList = new ArrayList<>();
         cardContainer = (CardContainer) findViewById(R.id.restaurant_card_container);
         SharedPreferences pref = this.getApplicationContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         cuisine = pref.getString("cuisine", "");
+
+        hatChatSpinner = (ImageView) findViewById(R.id.spinning_hat);
+        startAnimation();
+        shuffleButton = (Button) findViewById(R.id.shuffle_button);
+        shuffleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shuffle();
+            }
+        });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
@@ -197,7 +228,9 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
                     String description = business.snippetText();
                     String number = business.phone();
-                    RestaurantCardModel model = new RestaurantCardModel(name, description, rating, distance, address, photoURL,number);
+
+                    RestaurantCardModel model = new RestaurantCardModel(name, description, rating, distance,
+                            address, photoURL,number);
                     restaurantList.add(model);
                 }
 
@@ -207,14 +240,12 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
             @Override
             public void onFailure(Throwable t) {
-                Toast.makeText(context, "Error retrieving restaurants.", Toast.LENGTH_SHORT);
+                Toast.makeText(context, "Error retrieving restaurants.", Toast.LENGTH_SHORT).show();
             }
         };
         if (cuisine.length() > 0) {
-            Log.i("test", "the cuisine" + cuisine);
             params.put("term", cuisine);
         } else {
-            Log.i("test", "problem with cuisine");
             params.put("term", "food");
         }
 
@@ -223,7 +254,6 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
                 .longitude(currentLocation.getLongitude()).build();
 
         searchResponseCall = yelpAPI.search(coordinateOptions, params);
-        Log.i("test", "enqueue callback");
         searchResponseCall.enqueue(callback);
     }
 
@@ -241,6 +271,9 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
                     //Do nothing
                     //This is swipe left
                     modelCount--;
+                    if (modelCount < 0) {
+                        shuffleButton.setVisibility(View.VISIBLE);
+                    }
                 }
 
                 @Override
@@ -248,21 +281,45 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
                     //Choose between calling or navigation
                     //This is swipe right
                     RestaurantCardModel tempModel = restaurantList.get(modelCount);
-                    Intent intent = new Intent(context, HandleRestaurantChoiceActivity.class);
-                    intent.putExtra("name", tempModel.getTitle());
-                    intent.putExtra("address", tempModel.getAddress());
-                    intent.putExtra("description", tempModel.getDescription());
-                    intent.putExtra("photoURL", tempModel.getPhotoURL());
-                    intent.putExtra("number", tempModel.getNumber());
-                    intent.putExtra("latitude", currentLocation.getLatitude());
-                    intent.putExtra("longitude", currentLocation.getLongitude());
-                    startActivity(intent);
+
+                    finalRestaurantList.add(tempModel);
+
                     modelCount--;
+                    if (modelCount < 0) {
+                        shuffleButton.setVisibility(View.VISIBLE);
+                    }
                 }
             });
+
             adapter.add(model);
         }
+
+        hatChatSpinner.setAnimation(null);
+        hatChatSpinner.setVisibility(View.GONE);
         cardContainer.setAdapter(adapter);
+
+    }
+
+    public void shuffle() {
+        Random random = new Random();
+
+        if (finalRestaurantList.size() > 0) {
+            int value = random.nextInt(finalRestaurantList.size());
+
+            RestaurantCardModel tempModel = finalRestaurantList.get(value);
+            Intent intent = new Intent(context, HandleRestaurantChoiceActivity.class);
+            intent.putExtra("name", tempModel.getTitle());
+            intent.putExtra("address", tempModel.getAddress());
+            intent.putExtra("description", tempModel.getDescription());
+            intent.putExtra("photoURL", tempModel.getPhotoURL());
+            intent.putExtra("number", tempModel.getNumber());
+            intent.putExtra("latitude", currentLocation.getLatitude());
+            intent.putExtra("longitude", currentLocation.getLongitude());
+            startActivity(intent);
+
+        } else {
+            Toast.makeText(this, "Please choose at least 1 restaurant next time.", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }
