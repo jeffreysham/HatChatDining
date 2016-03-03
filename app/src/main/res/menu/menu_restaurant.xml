@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jeffreysham.hatchatdining.HandleRestaurantChoiceActivity">
+    <item
+        android:id="@+id/open_online"
+        android:orderInCategory="100"
+        android:title="@string/online"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/open_menu_online"
+        android:orderInCategory="100"
+        android:title="@string/online_menu"
+        app:showAsAction="never" />
+</menu>

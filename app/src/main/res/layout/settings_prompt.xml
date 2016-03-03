@@ -7,7 +7,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings"
+        android:text="@string/action_settings"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/background_color"/>
 
@@ -15,19 +15,19 @@
         android:id="@+id/editNameInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Edit name..."/>
+        android:hint="@string/edit_name"/>
 
 
     <EditText
         android:id="@+id/editDescriptionInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Edit description..."/>
+        android:hint="@string/edit_desc"/>
 
     <EditText
         android:id="@+id/editAgeInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Edit age..."/>
+        android:hint="@string/edit_age"/>
 
 </LinearLayout>

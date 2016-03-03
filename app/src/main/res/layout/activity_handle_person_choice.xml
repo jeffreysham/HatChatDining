@@ -67,7 +67,7 @@
             android:layout_height="match_parent"
             android:inputType="textMultiLine"
             android:ems="10"
-            android:hint="Write a message..."
+            android:hint="@string/write_message_hint"
             android:id="@+id/message_text"
             android:layout_width="0dp"
             android:backgroundTint="@color/white"/>

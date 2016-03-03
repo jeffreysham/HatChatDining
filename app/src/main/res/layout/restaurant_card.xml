@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Name"
         android:id="@+id/rest_name_view"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_margin="5dp"/>
 
     <LinearLayout

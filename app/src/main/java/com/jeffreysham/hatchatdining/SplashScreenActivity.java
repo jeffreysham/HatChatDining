@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -26,6 +27,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
+
+        final Context context = this;
 
         if (!isNetworkAvailable()) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -68,8 +71,32 @@ public class SplashScreenActivity extends AppCompatActivity {
                 });
                 dialog.show();
             } else {
-                Intent intent = new Intent(this,MainActivity.class);
-                startActivity(intent);
+
+                SharedPreferences pref = this.getApplicationContext().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+                String phoneNumber = pref.getString("phone number", null);
+
+                if (phoneNumber != null) {
+                    Intent intent = new Intent(this,MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    String message = "HatChat Dining asks users for their location, name, and phone number. " +
+                            "This information is used in order to create your profile and locate nearby users. " +
+                            "Also, your phone number will be used so that you can call or message nearby users or restaurants. " +
+                            "This application will never collect or transmit your personal data without " +
+                            "your consent.";
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle("Privacy Policy")
+                            .setMessage(message)
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(context,MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+                    alert.create().show();
+                }
             }
         }
 

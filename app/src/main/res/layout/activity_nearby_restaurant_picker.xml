@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:text="Shuffle"
+        android:text="@string/shuffle"
         android:background="@drawable/send_button"
         android:visibility="gone"
         android:id="@+id/shuffle_button"/>
