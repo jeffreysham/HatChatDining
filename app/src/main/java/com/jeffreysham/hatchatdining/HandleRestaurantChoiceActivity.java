@@ -189,7 +189,7 @@ public class HandleRestaurantChoiceActivity extends AppCompatActivity {
         } else if (id == R.id.open_menu_online) {
             AlertDialog.Builder alert = new AlertDialog.Builder(context);
             alert.setTitle("Visit Yelp for Menu information")
-                    .setMessage("Are you sure you want to navigate to Yelp?")
+                    .setMessage("Are you sure you want to navigate to Yelp? Note: Yelp may not have menu information for this restaurant.")
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

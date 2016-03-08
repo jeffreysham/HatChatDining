@@ -21,6 +21,7 @@
         android:id="@+id/phoneNumberInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="phone"
         android:hint="@string/enter_phone"/>
 
     <EditText
@@ -33,6 +34,7 @@
         android:id="@+id/ageInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         android:hint="@string/enter_age"/>
 
 </LinearLayout>
