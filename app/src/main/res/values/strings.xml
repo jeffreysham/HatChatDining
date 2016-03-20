@@ -7,6 +7,7 @@
     <string name="write_message_hint">Write a message&#8230;</string>
     <string name="shuffle">Shuffle</string>
     <string name="enter_user_info">Enter User Information</string>
+    <string name="enter_loc_info">Enter Location Address</string>
     <string name="enter_name">Enter name&#8230;</string>
     <string name="enter_phone">Enter phone number&#8230;</string>
     <string name="enter_desc">Enter description&#8230;</string>
@@ -14,7 +15,9 @@
     <string name="edit_name">Edit name&#8230;</string>
     <string name="edit_desc">Edit description&#8230;</string>
     <string name="edit_age">Edit age&#8230;</string>
+    <string name="enter_address">Enter address&#8230;</string>
     <string name="online">View Online</string>
+    <string name="location">Set Location</string>
     <string name="online_menu">View Menu Online</string>
     <string name="uber_client_id">AkrLjaCxtYU-YMgIXKPhVFk6_7wzQ98R</string>
     <string-array name="cuisine_array">

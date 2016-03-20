@@ -24,7 +24,7 @@ android {
         applicationId "com.jeffreysham.hatchatdining"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 4
+        versionCode 5
         versionName "1.0"
         multiDexEnabled true
     }
@@ -61,7 +61,6 @@ dependencies {
     compile 'com.trnql:lib-release:1.0.0@aar'
     compile 'com.google.android.gms:play-services-location:7.5.0'
     compile 'com.google.android.gms:play-services-gcm:7.5.0'
-    compile 'com.github.kikoso:SwipeableCards:1.1-RELEASE@aar'
     compile 'com.yelp.clientlib:yelp-android:1.0.0'
     compile 'com.facebook.fresco:fresco:0.9.0'
     compile 'com.uber.sdk:rides-android:0.1.0'

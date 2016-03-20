@@ -1,6 +1,6 @@
 package com.jeffreysham.hatchatdining;
 
-import com.andtinder.model.CardModel;
+import com.jeffreysham.hatchatdining.tindercards.CardModel;
 
 /**
  * Created by Jeffrey Sham on 2/12/2016.

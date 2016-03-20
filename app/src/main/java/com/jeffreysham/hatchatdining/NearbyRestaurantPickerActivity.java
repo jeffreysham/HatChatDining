@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,22 +19,27 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.andtinder.model.CardModel;
-import com.andtinder.view.CardContainer;
+import com.jeffreysham.hatchatdining.tindercards.CardModel;
+import com.jeffreysham.hatchatdining.tindercards.CardContainer;
 import com.yelp.clientlib.connection.YelpAPI;
 import com.yelp.clientlib.connection.YelpAPIFactory;
 import com.yelp.clientlib.entities.Business;
 import com.yelp.clientlib.entities.SearchResponse;
 import com.yelp.clientlib.entities.options.CoordinateOptions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +70,11 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        locationManager.removeUpdates(this);
+
+        Log.i("test", "location changed");
         currentLocation = location;
         findRestaurants(cuisine);
     }
@@ -113,6 +125,7 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
         });
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
@@ -162,21 +175,22 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
             } else {
                 Log.i("test", "gps available");
                 Criteria criteria = new Criteria();
-                provider = locationManager.getBestProvider(criteria, false);
+                provider = locationManager.getBestProvider(criteria, true);
 
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
 
+                locationManager.requestLocationUpdates(provider, 1000 * 60, 10, this);
                 Location location = locationManager.getLastKnownLocation(provider);
+
                 if (location != null) {
+                    locationManager.removeUpdates(this);
+                    Log.i("test", "location not null");
                     currentLocation = location;
                     findRestaurants(cuisine);
                 } else {
-                    //Set Location for emulator
-                    currentLocation = new Location(provider);
-                    currentLocation.setLatitude(39.330531);
-                    currentLocation.setLongitude(-76.616709);
-                    findRestaurants(cuisine);
+                    Log.i("test", "location is null");
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000 * 60, 10, this);
                 }
             }
         }
@@ -263,15 +277,20 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
         Log.i("test", "setupCards");
         RestaurantCardStackAdapter adapter = new RestaurantCardStackAdapter(this);
-        modelCount = restaurantList.size()-1;
+        modelCount = restaurantList.size() - 1;
 
         for (int i = 0; i < restaurantList.size(); i++) {
             RestaurantCardModel model = restaurantList.get(i);
-            model.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+
+            model.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                 @Override
                 public void onLike() {
-                    //Do nothing
-                    //This is swipe left
+                    //Choose between calling or navigation
+                    //This is swipe right
+                    RestaurantCardModel tempModel = restaurantList.get(modelCount);
+
+                    finalRestaurantList.add(tempModel);
+
                     modelCount--;
                     if (modelCount < 0) {
                         shuffleButton.setVisibility(View.VISIBLE);
@@ -280,12 +299,8 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
 
                 @Override
                 public void onDislike() {
-                    //Choose between calling or navigation
-                    //This is swipe right
-                    RestaurantCardModel tempModel = restaurantList.get(modelCount);
-
-                    finalRestaurantList.add(tempModel);
-
+                    //Do nothing
+                    //This is swipe left
                     modelCount--;
                     if (modelCount < 0) {
                         shuffleButton.setVisibility(View.VISIBLE);
@@ -327,5 +342,82 @@ public class NearbyRestaurantPickerActivity extends AppCompatActivity implements
             Toast.makeText(this, "Please choose at least 1 restaurant next time.", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_find_restaurant, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.set_location) {
+            enterLocation();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void enterLocation() {
+
+        LayoutInflater li = LayoutInflater.from(this);
+        View alertView = li.inflate(R.layout.location_prompt, null);
+
+        AlertDialog.Builder getLocDialog = new AlertDialog.Builder(this);
+        getLocDialog.setView(alertView);
+
+        final EditText locationInput = (EditText) alertView.findViewById(R.id.locationInput);
+
+        getLocDialog.setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getLocationFromAddress(locationInput.getText().toString().trim());
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        getLocDialog.create().show();
+    }
+
+    public void getLocationFromAddress(String strAddress){
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        locationManager.removeUpdates(this);
+
+        Geocoder coder = new Geocoder(this);
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress,5);
+            if (address==null) {
+                return;
+            }
+            Address location=address.get(0);
+
+            Location temp = new Location(provider);
+            temp.setLongitude(location.getLongitude());
+            temp.setLatitude(location.getLatitude());
+
+            currentLocation = temp;
+            findRestaurants(cuisine);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error with inputted address.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

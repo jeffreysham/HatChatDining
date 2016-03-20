@@ -19,8 +19,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.andtinder.model.CardModel;
-import com.andtinder.view.CardContainer;
+import com.jeffreysham.hatchatdining.tindercards.CardModel;
+import com.jeffreysham.hatchatdining.tindercards.CardContainer;
 import com.trnql.smart.base.SmartCompatActivity;
 import com.trnql.smart.people.PersonEntry;
 
@@ -187,23 +187,24 @@ public class NearbyPersonPickerActivity extends SmartCompatActivity {
                 int age = jsonObject.getInt("age");
 
                 final PersonCardModel cardModel = new PersonCardModel(name, desc, number, age);
-                cardModel.setOnCardDimissedListener(new CardModel.OnCardDimissedListener() {
+                cardModel.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
                     @Override
                     public void onLike() {
-                        Log.i("Swipe able Cards", "I dislike the card");
-                        //Do nothing
-                        modelCount--;
-                        if (modelCount < 0) {
-                            shuffleButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    @Override
-                    public void onDislike() {
                         Log.i("Swipe able Cards", "I like the card");
                         //Send a message or call
                         PersonCardModel tempModel = peopleCardList.get(modelCount);
                         finalPeopleCardList.add(tempModel);
+                        modelCount--;
+                        if (modelCount < 0) {
+                            shuffleButton.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+
+                    @Override
+                    public void onDislike() {
+                        Log.i("Swipe able Cards", "I dislike the card");
+                        //Do nothing
                         modelCount--;
                         if (modelCount < 0) {
                             shuffleButton.setVisibility(View.VISIBLE);

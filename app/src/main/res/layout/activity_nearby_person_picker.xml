@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:context="com.jeffreysham.hatchatdining.NearbyPersonPickerActivity">
 
-    <com.andtinder.view.CardContainer
+    <com.jeffreysham.hatchatdining.tindercards.CardContainer
         android:id="@+id/person_card_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

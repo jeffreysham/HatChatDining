@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.andtinder.model.CardModel;
-import com.andtinder.view.CardStackAdapter;
+import com.jeffreysham.hatchatdining.tindercards.CardModel;
+import com.jeffreysham.hatchatdining.tindercards.CardStackAdapter;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
